@@ -29,12 +29,36 @@ Fonte (SQL Server)
 Camadas
 
 **Bronze:**
-Dados crus, sem regras de negócio, persistidos exatamente como vêm da fonte.
+
+- Contém dados crus extraídos diretamente do SQL Server
+
+- Nenhuma transformação é aplicada
+
+- Serve como fonte confiável para reprocessamento
+
+- Persistido em formato Parquet
 
 **Silver:**
-Dados limpos, tipados, padronizados e deduplicados, prontos para consumo analítico.
+
+- Contém dados limpos e padronizados
+
+- Conversão de tipos de dados
+
+- Padronização de campos textuais
+
+- Criação de colunas derivadas (ex: tipoMovimento, valorAbsolutoMovimentacao)
+
+- Remoção de duplicidades
+
+- Camada confiável para consumo analítico
         
 **Gold:**
+
+- Contém dados agregados e estruturados para análise
+
+- Aplicação de regras analíticas e métricas de negócio
+
+- Base para dashboards, relatórios e consultas analíticas
 
  ## 📂 Estrutura do Projeto
 
@@ -43,29 +67,59 @@ data-engineering-medallion-architecture/
 │
 ├── src/
 │   ├── connections/
-│   │   └── sqlserver.py
+│   │   └── sqlserver.py              # Conexão com SQL Server
 │   │
 │   ├── extract/
 │   │   ├── extract_transacoes_sqlserver.py
-│   │   └── bronze_writer.py
+│   │   └── bronze_writer.py         # Persistência Bronze
 │   │
 │   ├── transform/
 │   │   ├── read_bronze.py
-│   │   ├── transform_transacoes.py
-│   │   └── write_silver.py
+│   │   ├── transform_transacoes.py  # Transformações Silver
+│   │   ├── transform_gold_transacoes.py # Transformações Gold
+│   │   ├── write_silver.py
+│   │   └── write_gold.py
 │   │
 │   └── __init__.py
 │
 ├── configs/
-│   └── db.yaml
+│   └── db.yaml                      # Configurações de conexão
 │
 ├── data/
 │   ├── bronze/
-│   └── silver/
+│   ├── silver/
+│   └── gold/
 │
-├── main.py
+├── main.py                         # Orquestrador do pipeline
 └── README.md
 
 
 ```
 
+
+## Como Executar
+
+Na raiz do projeto:
+
+```Python
+
+python main.py
+
+
+```
+
+
+
+##  Conclusão
+
+Este projeto demonstra a implementação prática de um pipeline ETL completo utilizando a arquitetura medalhão, aplicando conceitos fundamentais de engenharia de dados como:
+
+Extração confiável
+
+Persistência intermediária
+
+Transformações controladas
+
+Estrutura analítica final
+
+Servindo como base sólida para pipelines escaláveis e ambientes produtivos.
